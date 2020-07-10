@@ -21,15 +21,22 @@ Models trained here will appear in the Hello-Friends experiment,.
 This includes an outline of the shell commands needed on an AWS ubuntu server EC2 to get MLflow running.
 This does not include the CLI commands to launch RDS, S3, or EC2 instances with the proper security groups.
 
-## Security group considerations
+## AWS considerations group considerations
+#### Security Group
  - The EC2 instance should be externally accessible, SSH on port 22 should be open
  - The EC2 instance should be accessible on the port used by MLflow, this is 5000 by default
  - The S3 bucket should be accessible from the EC2
  - The RDS should be in the same VPC as the EC2
  - The security group on the RDS should be accessible from the security group the EC2 is in. This can be done by setting the incoming traffic to allow the EC2 security group
+#### IAM Roles
+ - The EC2 should have an IAM role with AmazonS3FullAccess, AmazonRDSFullAccess
 
+## MLflow setup considerations
+ - Upgrade to python3
+ - Install mlflow and boto3 with pip
+ - If error "no module named MySQLdb":  
+    `sudo apt-get install python3-dev libmysqlclient-dev`  
+    `sudo pip3 install mysqlclient`  
 
 ## Current problems:
- - Cannot load model pages, unclear if this is due to security configurations on the AWS security group, S3 bucket, or other MLflow related issues
- - Requires my AWS authentication information. This is due to MLflow using the `aws` api. Potential solutions include providing another server to bounce traffic off of that's more publicly accessible. 
  - There's really no security. I just closed ports. Therefore I cannot have this running for extended amounts of time. 
